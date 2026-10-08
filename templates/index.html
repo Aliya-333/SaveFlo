@@ -1,0 +1,2432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="canonical" href="https://priceprism.com">
+
+<meta property="og:url" content="https://priceprism.com">
+
+<title>PricePrism - Compare Prices</title>
+
+<style>
+
+/* =====================================================
+   GLOBAL
+   ===================================================== */
+
+:root {
+    --bg: #050816;
+    --blue: #4f8cff;
+    --cyan: #5cf3ff;
+    --pink: #ff5ccf;
+    --green: #79f2b0;
+    --dark-blue: #012169;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: white;
+    min-height: 100vh;
+}
+
+
+/* =====================================================
+   HERO
+   ===================================================== */
+
+.ps-neon-hero {
+
+    position: relative;
+
+    isolation: isolate;
+
+    min-height: 100vh;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(79,140,255,0.18),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(255,92,207,0.12),
+            transparent 30%
+        ),
+
+        #050816;
+}
+
+
+/* =====================================================
+   BACKGROUND GLOW
+   ===================================================== */
+
+.ps-neon-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -20%;
+
+    z-index: -5;
+
+    background:
+
+        radial-gradient(
+            circle at 30% 40%,
+            rgba(92,243,255,0.16),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 75% 55%,
+            rgba(79,140,255,0.18),
+            transparent 25%
+        );
+
+    filter: blur(70px);
+
+    animation:
+        breathingGlow
+        8s ease-in-out
+        infinite alternate;
+}
+
+
+/* =====================================================
+   STAR FIELD
+   ===================================================== */
+
+.ps-neon-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -4;
+
+    background-image:
+
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.85) 1px,
+            transparent 1px
+        ),
+
+        radial-gradient(
+            circle,
+            rgba(92,243,255,0.6) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        80px 80px,
+        130px 130px;
+
+    background-position:
+        0 0,
+        30px 40px;
+
+    opacity: 0.4;
+
+    animation:
+        starsMove
+        25s linear
+        infinite;
+}
+
+
+/* =====================================================
+   CONTENT
+   ===================================================== */
+
+.ps-neon-content {
+
+    position: relative;
+
+    z-index: 5;
+
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding:
+        70px 20px;
+}
+
+
+/* =====================================================
+   HEADING
+   ===================================================== */
+
+.ps-neon-copy {
+
+    position: relative;
+
+    z-index: 10;
+
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+.ps-neon-copy h1 {
+
+    font-size:
+        clamp(42px,7vw,78px);
+
+    font-weight: 800;
+
+    letter-spacing: -2px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #ffffff,
+            var(--cyan),
+            var(--blue),
+            var(--pink)
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+
+    text-shadow:
+        0 0 30px
+        rgba(92,243,255,0.2);
+}
+
+.ps-neon-copy p {
+
+    margin-top: 12px;
+
+    font-size: 18px;
+
+    color: #b8c7e6;
+}
+
+
+/* =====================================================
+   CONSTELLATION — RIGHT SIDE
+   ===================================================== */
+
+.ps-constellation {
+
+    position: absolute;
+
+    width:
+        clamp(520px,65vw,900px);
+
+    height:
+        clamp(520px,65vw,900px);
+
+    right: -180px;
+
+    left: auto;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    z-index: 0;
+
+    opacity: 0.72;
+
+    pointer-events: none;
+
+    transition:
+        transform 0.15s ease-out;
+}
+
+
+/* =====================================================
+   CONSTELLATION GLOW
+   ===================================================== */
+
+.ps-constellation::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 12%;
+
+    border-radius: 50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(92,243,255,0.12),
+            rgba(79,140,255,0.05),
+            transparent 70%
+        );
+
+    filter: blur(35px);
+
+    animation:
+        constellationGlow
+        5s ease-in-out
+        infinite alternate;
+}
+
+
+/* =====================================================
+   CONSTELLATION LINES
+   ===================================================== */
+
+.ps-line {
+
+    position: absolute;
+
+    height: 3px;
+
+    transform-origin: left center;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            rgba(92,243,255,0.95),
+            rgba(79,140,255,0.18)
+        );
+
+    box-shadow:
+
+        0 0 12px
+        rgba(92,243,255,0.7),
+
+        0 0 25px
+        rgba(79,140,255,0.35);
+
+    transition:
+        filter 0.3s ease;
+}
+
+.ps-constellation:hover .ps-line {
+
+    filter:
+        brightness(1.4);
+}
+
+
+.line-1 {
+    width: 280px;
+    left: 120px;
+    top: 150px;
+    transform: rotate(25deg);
+}
+
+.line-2 {
+    width: 270px;
+    left: 360px;
+    top: 275px;
+    transform: rotate(105deg);
+}
+
+.line-3 {
+    width: 290px;
+    left: 215px;
+    top: 440px;
+    transform: rotate(-30deg);
+}
+
+.line-4 {
+    width: 260px;
+    left: 160px;
+    top: 360px;
+    transform: rotate(-90deg);
+}
+
+.line-5 {
+    width: 250px;
+    left: 380px;
+    top: 180px;
+    transform: rotate(40deg);
+}
+
+.line-6 {
+    width: 230px;
+    left: 370px;
+    top: 500px;
+    transform: rotate(-55deg);
+}
+
+
+/* =====================================================
+   NODES
+   ===================================================== */
+
+.ps-node {
+
+    position: absolute;
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+
+        0 0 15px
+        var(--cyan),
+
+        0 0 40px
+        rgba(92,243,255,0.8),
+
+        0 0 70px
+        rgba(92,243,255,0.35);
+
+    animation:
+        nodePulse
+        3s ease-in-out
+        infinite;
+
+    transition:
+        transform 0.2s ease-out;
+}
+
+
+/* Bigger nodes when mouse is nearby */
+
+.ps-node:hover {
+
+    transform:
+        scale(1.8);
+
+    box-shadow:
+
+        0 0 20px var(--cyan),
+
+        0 0 50px var(--cyan),
+
+        0 0 90px
+        rgba(92,243,255,0.7);
+}
+
+
+.node-1 {
+    left: 105px;
+    top: 140px;
+}
+
+.node-2 {
+
+    left: 365px;
+
+    top: 265px;
+
+    background:
+        var(--pink);
+
+    box-shadow:
+
+        0 0 15px
+        var(--pink),
+
+        0 0 40px
+        rgba(255,92,207,0.8),
+
+        0 0 70px
+        rgba(255,92,207,0.35);
+
+    animation-delay:
+        0.5s;
+}
+
+.node-3 {
+
+    left: 330px;
+
+    top: 440px;
+
+    background:
+        var(--blue);
+
+    box-shadow:
+
+        0 0 15px
+        var(--blue),
+
+        0 0 40px
+        rgba(79,140,255,0.8),
+
+        0 0 70px
+        rgba(79,140,255,0.35);
+
+    animation-delay:
+        1s;
+}
+
+.node-4 {
+
+    left: 170px;
+
+    top: 350px;
+
+    background:
+        var(--green);
+
+    box-shadow:
+
+        0 0 15px
+        var(--green),
+
+        0 0 40px
+        rgba(121,242,176,0.8),
+
+        0 0 70px
+        rgba(121,242,176,0.35);
+
+    animation-delay:
+        1.5s;
+}
+
+.node-5 {
+
+    left: 535px;
+
+    top: 370px;
+
+    animation-delay:
+        2s;
+}
+
+.node-6 {
+
+    left: 515px;
+
+    top: 155px;
+
+    background:
+        var(--pink);
+
+    box-shadow:
+
+        0 0 15px
+        var(--pink),
+
+        0 0 40px
+        rgba(255,92,207,0.8);
+
+    animation-delay:
+        2.5s;
+}
+
+
+/* =====================================================
+   DEAL CHIPS
+   ===================================================== */
+
+.ps-deal-chip {
+
+    position: absolute;
+
+    padding:
+        12px 18px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(1,33,105,0.55);
+
+    border:
+        1px solid
+        rgba(92,243,255,0.3);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    color: white;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+
+    box-shadow:
+
+        0 15px 35px
+        rgba(0,0,0,0.3),
+
+        0 0 20px
+        rgba(92,243,255,0.08);
+
+    animation:
+        chipFloat
+        5s ease-in-out
+        infinite alternate;
+}
+
+.chip-1 {
+    top: 70px;
+    left: 420px;
+}
+
+.chip-2 {
+    top: 570px;
+    left: 155px;
+    animation-delay: 1s;
+}
+
+.chip-3 {
+    top: 325px;
+    left: 565px;
+    animation-delay: 2s;
+}
+
+
+/* =====================================================
+   MAIN CARD
+   ===================================================== */
+
+.main-card {
+
+    position: relative;
+
+    z-index: 20;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    padding: 38px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(1,33,105,0.88),
+            rgba(1,33,105,0.70)
+        );
+
+    border-radius: 28px;
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    border:
+        1px solid
+        rgba(92,243,255,0.30);
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(0,0,0,0.55),
+
+        0 0 45px
+        rgba(92,243,255,0.15),
+
+        inset 0 1px 0
+        rgba(255,255,255,0.14);
+
+    color: white;
+}
+
+
+/* =====================================================
+   BRAND
+   ===================================================== */
+
+.brand {
+
+    text-align: center;
+
+    font-size: 36px;
+
+    font-weight: 800;
+
+    color: white;
+
+    text-shadow:
+        0 0 15px
+        rgba(92,243,255,0.45);
+}
+
+.sub {
+
+    margin:
+        18px auto 30px;
+
+    max-width: 650px;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+    color: #d5e4ff;
+}
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+.search-row {
+
+    display: flex;
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+#q {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 58px;
+
+    padding:
+        0 20px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,0.10);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.25);
+
+    backdrop-filter:
+        blur(10px);
+
+    outline: none;
+
+    font-size: 16px;
+
+    color: white;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+#q::placeholder {
+
+    color:
+        rgba(255,255,255,0.65);
+}
+
+#q:focus {
+
+    border-color:
+        var(--cyan);
+
+    background:
+        rgba(255,255,255,0.14);
+
+    box-shadow:
+
+        0 0 0 4px
+        rgba(92,243,255,0.12),
+
+        0 0 25px
+        rgba(92,243,255,0.10);
+}
+
+
+/* =====================================================
+   SEARCH BUTTON
+   ===================================================== */
+
+#searchBtn {
+
+    height: 58px;
+
+    padding:
+        0 28px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+    color: #031027;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+
+        0 10px 25px
+        rgba(79,140,255,0.3);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+#searchBtn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+
+        0 15px 35px
+        rgba(92,243,255,0.35);
+}
+
+#searchBtn:active {
+
+    transform:
+        translateY(0);
+}
+
+#searchBtn:disabled {
+
+    opacity:
+        0.6;
+
+    cursor:
+        wait;
+}
+
+
+/* =====================================================
+   DEMO
+   ===================================================== */
+
+.demo {
+
+    margin-top: 18px;
+
+    padding:
+        12px 16px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    text-align: center;
+
+    color:
+        #d5e4ff;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   ERROR
+   ===================================================== */
+
+.error {
+
+    margin-top: 20px;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,80,100,0.12);
+
+    border:
+        1px solid
+        rgba(255,100,120,0.35);
+
+    color:
+        #ffd5db;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   RESULTS
+   ===================================================== */
+
+#results {
+    margin-top: 35px;
+}
+
+.result-header {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.result-header h2 {
+    font-size: 22px;
+}
+
+.savings {
+
+    color:
+        var(--green);
+
+    font-weight:
+        700;
+
+    font-size:
+        14px;
+}
+
+.result-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    backdrop-filter:
+        blur(10px);
+
+    transition:
+        transform 0.2s,
+        background 0.2s,
+        border-color 0.2s;
+}
+
+.result-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    background:
+        rgba(255,255,255,0.11);
+
+    border-color:
+        rgba(92,243,255,0.35);
+}
+
+.product-image {
+
+    width: 80px;
+
+    height: 80px;
+
+    object-fit:
+        contain;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    padding: 6px;
+
+    flex-shrink: 0;
+}
+
+.product-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+.store {
+
+    font-size: 13px;
+
+    color:
+        var(--cyan);
+
+    font-weight:
+        700;
+
+    margin-bottom: 5px;
+}
+
+.product-title {
+
+    font-size: 16px;
+
+    color: white;
+
+    line-height: 1.4;
+
+    display:
+        -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient:
+        vertical;
+
+    overflow: hidden;
+}
+
+.price-area {
+
+    text-align: right;
+
+    min-width: 130px;
+}
+
+.price {
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    color: white;
+}
+
+.extra {
+
+    font-size: 12px;
+
+    color:
+        #aebddd;
+
+    margin-top: 3px;
+}
+
+.cheapest {
+
+    color:
+        var(--green);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    margin-top: 3px;
+}
+
+.buy-btn {
+
+    display: inline-block;
+
+    margin-top: 9px;
+
+    padding:
+        9px 16px;
+
+    border-radius: 10px;
+
+    text-decoration:
+        none;
+
+    background:
+        rgba(92,243,255,0.12);
+
+    border:
+        1px solid
+        rgba(92,243,255,0.35);
+
+    color:
+        var(--cyan);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s,
+        background 0.2s;
+}
+
+.buy-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(92,243,255,0.22);
+}
+
+
+/* =====================================================
+   LOADING
+   ===================================================== */
+
+.loading {
+
+    text-align: center;
+
+    padding: 30px;
+
+    color:
+        #c9d6ee;
+}
+
+.spinner {
+
+    width: 35px;
+
+    height: 35px;
+
+    margin:
+        0 auto 12px;
+
+    border-radius: 50%;
+
+    border:
+        3px solid
+        rgba(255,255,255,0.15);
+
+    border-top-color:
+        var(--cyan);
+
+    animation:
+        spin
+        0.8s linear
+        infinite;
+}
+
+.empty {
+
+    text-align: center;
+
+    padding:
+        35px 10px;
+
+    color:
+        #aebddd;
+}
+
+
+/* =====================================================
+   MOUSE GLOW
+   ===================================================== */
+
+.ps-pointer-glow {
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    width: 300px;
+
+    height: 300px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(92,243,255,0.18),
+            rgba(79,140,255,0.07),
+            transparent 70%
+        );
+
+    transform:
+        translate(-50%,-50%);
+
+    z-index: 30;
+
+    mix-blend-mode:
+        screen;
+
+    transition:
+        opacity 0.2s;
+}
+
+
+/* =====================================================
+   MOUSE TRAIL
+   ===================================================== */
+
+.ps-pointer-trail {
+
+    position: fixed;
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+
+        0 0 10px
+        var(--cyan),
+
+        0 0 20px
+        var(--cyan);
+
+    z-index: 40;
+
+    opacity: 0.8;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+
+@keyframes breathingGlow {
+
+    from {
+
+        transform:
+            scale(1);
+
+        opacity:
+            0.7;
+    }
+
+    to {
+
+        transform:
+            scale(1.08);
+
+        opacity:
+            1;
+    }
+}
+
+@keyframes starsMove {
+
+    from {
+
+        background-position:
+            0 0,
+            30px 40px;
+    }
+
+    to {
+
+        background-position:
+            80px 80px,
+            160px 120px;
+    }
+}
+
+@keyframes constellationGlow {
+
+    from {
+
+        opacity:
+            0.5;
+
+        transform:
+            scale(0.95);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            scale(1.08);
+    }
+}
+
+@keyframes nodePulse {
+
+    0%,100% {
+
+        transform:
+            scale(1);
+    }
+
+    50% {
+
+        transform:
+            scale(1.35);
+    }
+}
+
+@keyframes chipFloat {
+
+    from {
+
+        transform:
+            translateY(0);
+    }
+
+    to {
+
+        transform:
+            translateY(-12px);
+    }
+}
+
+@keyframes spin {
+
+    to {
+
+        transform:
+            rotate(360deg);
+    }
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width:1000px) {
+
+    .ps-constellation {
+
+        width: 600px;
+
+        height: 600px;
+
+        right:
+            -280px;
+
+        opacity:
+            0.45;
+    }
+}
+
+
+/* =====================================================
+   SMALL TABLET
+   ===================================================== */
+
+@media (max-width:800px) {
+
+    .ps-constellation {
+
+        width: 560px;
+
+        height: 560px;
+
+        right:
+            -300px;
+
+        opacity:
+            0.32;
+    }
+
+    .main-card {
+
+        padding:
+            25px;
+
+        border-radius:
+            22px;
+    }
+
+    .search-row {
+
+        flex-direction:
+            column;
+    }
+
+    #searchBtn {
+
+        width:
+            100%;
+    }
+
+    .result-card {
+
+        align-items:
+            flex-start;
+
+        flex-wrap:
+            wrap;
+    }
+
+    .price-area {
+
+        width:
+            100%;
+
+        text-align:
+            left;
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width:500px) {
+
+    .ps-neon-content {
+
+        padding:
+            40px 12px;
+    }
+
+    .ps-neon-copy h1 {
+
+        font-size:
+            48px;
+    }
+
+    .ps-neon-copy p {
+
+        font-size:
+            15px;
+    }
+
+    .ps-constellation {
+
+        width:
+            420px;
+
+        height:
+            420px;
+
+        right:
+            -270px;
+
+        top:
+            18%;
+
+        opacity:
+            0.25;
+    }
+
+    .ps-deal-chip {
+
+        display:
+            none;
+    }
+
+    .main-card {
+
+        padding:
+            20px;
+
+        border-radius:
+            20px;
+    }
+
+    .brand {
+
+        font-size:
+            30px;
+    }
+
+    .sub {
+
+        font-size:
+            15px;
+    }
+
+    .product-image {
+
+        width:
+            65px;
+
+        height:
+            65px;
+    }
+
+    .price {
+
+        font-size:
+            20px;
+    }
+
+    .result-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONE
+   ===================================================== */
+
+@media (max-width:380px) {
+
+    .ps-neon-content {
+
+        padding:
+            30px 10px;
+    }
+
+    .ps-neon-copy h1 {
+
+        font-size:
+            40px;
+    }
+
+    .ps-constellation {
+
+        width:
+            360px;
+
+        height:
+            360px;
+
+        right:
+            -235px;
+
+        opacity:
+            0.20;
+    }
+
+    .main-card {
+
+        padding:
+            17px;
+    }
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion:reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+
+<div class="ps-neon-hero">
+
+
+    <!-- MOUSE GLOW -->
+
+    <div
+        class="ps-pointer-glow"
+        id="glow">
+    </div>
+
+
+    <!-- =================================================
+         RIGHT CONSTELLATION
+         ================================================= -->
+
+    <div
+        class="ps-constellation"
+        id="constellation">
+
+
+        <!-- Lines -->
+
+        <div class="ps-line line-1"></div>
+
+        <div class="ps-line line-2"></div>
+
+        <div class="ps-line line-3"></div>
+
+        <div class="ps-line line-4"></div>
+
+        <div class="ps-line line-5"></div>
+
+        <div class="ps-line line-6"></div>
+
+
+        <!-- Nodes -->
+
+        <div class="ps-node node-1"></div>
+
+        <div class="ps-node node-2"></div>
+
+        <div class="ps-node node-3"></div>
+
+        <div class="ps-node node-4"></div>
+
+        <div class="ps-node node-5"></div>
+
+        <div class="ps-node node-6"></div>
+
+
+        <!-- Floating chips -->
+
+        <div class="ps-deal-chip chip-1">
+            ⚡ Lowest Price
+        </div>
+
+        <div class="ps-deal-chip chip-2">
+            💰 Best Deal
+        </div>
+
+        <div class="ps-deal-chip chip-3">
+            🔎 Compare
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CONTENT
+         ================================================= -->
+
+    <main class="ps-neon-content">
+
+
+        <!-- Heading -->
+
+        <div class="ps-neon-copy">
+
+            <h1>
+                PricePrism
+            </h1>
+
+            <p>
+                Search once. Compare prices. Find the best deal.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             MAIN CARD
+             ================================================= -->
+
+        <section class="main-card">
+
+
+            <div class="brand">
+
+                🛒 PricePrism
+
+            </div>
+
+
+            <p class="sub">
+
+                Find the best price for a product by comparing
+                offers from multiple shopping websites in one place.
+
+            </p>
+
+
+            <!-- Search -->
+
+            <form id="searchForm">
+
+                <div class="search-row">
+
+                    <input
+                        id="q"
+                        type="text"
+                        placeholder="Search for a product, e.g. iPhone 15..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        id="searchBtn"
+                        type="submit"
+                    >
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- Demo -->
+
+            {% if demo %}
+
+            <div class="demo">
+
+                ⚠️ Demo mode is active.
+
+                Add your SerpAPI key to
+
+                <strong>.env</strong>
+
+                for real shopping results.
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- Error -->
+
+            <div
+                id="error"
+                class="error"
+                style="display:none;">
+            </div>
+
+
+            <!-- Results -->
+
+            <div id="results"></div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   ELEMENTS
+   ===================================================== */
+
+const form =
+    document.getElementById("searchForm");
+
+const input =
+    document.getElementById("q");
+
+const button =
+    document.getElementById("searchBtn");
+
+const resultsBox =
+    document.getElementById("results");
+
+const errorBox =
+    document.getElementById("error");
+
+const glow =
+    document.getElementById("glow");
+
+const constellation =
+    document.getElementById("constellation");
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const query =
+            input.value.trim();
+
+        if (query.length < 2) {
+
+            showError(
+                "Please type at least 2 characters."
+            );
+
+            return;
+        }
+
+        errorBox.style.display =
+            "none";
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Searching...";
+
+        resultsBox.innerHTML = `
+
+            <div class="loading">
+
+                <div class="spinner"></div>
+
+                <div>
+                    Finding the best prices...
+                </div>
+
+            </div>
+
+        `;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/search?q=" +
+                    encodeURIComponent(query)
+                );
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Search failed."
+                );
+            }
+
+
+            renderResults(data);
+
+        }
+
+
+        catch(error) {
+
+            showError(
+                error.message ||
+                "Could not fetch prices right now."
+            );
+
+            resultsBox.innerHTML =
+                "";
+        }
+
+
+        finally {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Search";
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ERROR
+   ===================================================== */
+
+function showError(message) {
+
+    errorBox.textContent =
+        message;
+
+    errorBox.style.display =
+        "block";
+}
+
+
+/* =====================================================
+   RESULTS
+   ===================================================== */
+
+function renderResults(data) {
+
+    const results =
+        data.results || [];
+
+
+    if (!results.length) {
+
+        resultsBox.innerHTML = `
+
+            <div class="empty">
+
+                No shopping results were found for
+
+                <strong>
+                    ${escapeHtml(
+                        data.query || ""
+                    )}
+                </strong>.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    let html = `
+
+        <div class="result-header">
+
+            <h2>
+
+                Results for
+                "${escapeHtml(data.query)}"
+
+            </h2>
+
+
+            <div class="savings">
+
+                Save up to
+                ${formatPrice(data.max_savings)}
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    results.forEach(
+        function(item,index) {
+
+
+            const isCheapest =
+                index === 0;
+
+
+            let image;
+
+
+            if (item.image) {
+
+                image = `
+
+                    <img
+                        class="product-image"
+                        src="${escapeAttribute(
+                            item.image
+                        )}"
+                        alt="Product image"
+                        onerror="this.style.display='none'"
+                    >
+
+                `;
+
+            }
+
+            else {
+
+                image = `
+
+                    <div class="product-image"></div>
+
+                `;
+            }
+
+
+            const safeUrl =
+                /^https?:\/\//i.test(
+                    item.link || ""
+                )
+                    ? item.link
+                    : "#";
+
+
+            html += `
+
+                <div class="result-card">
+
+
+                    ${image}
+
+
+                    <div class="product-info">
+
+
+                        <div class="store">
+
+                            ${escapeHtml(
+                                item.store ||
+                                "Unknown store"
+                            )}
+
+                        </div>
+
+
+                        <div class="product-title">
+
+                            ${escapeHtml(
+                                item.title ||
+                                data.query
+                            )}
+
+                        </div>
+
+
+                        ${
+                            isCheapest
+                            ? `
+
+                                <div class="cheapest">
+
+                                    ✓ CHEAPEST PRICE
+
+                                </div>
+
+                              `
+                            : ""
+                        }
+
+
+                    </div>
+
+
+                    <div class="price-area">
+
+
+                        <div class="price">
+
+                            ${formatPrice(
+                                item.price
+                            )}
+
+                        </div>
+
+
+                        ${
+                            item.extra_vs_cheapest > 0
+
+                            ? `
+
+                                <div class="extra">
+
+                                    +
+                                    ${formatPrice(
+                                        item.extra_vs_cheapest
+                                    )}
+
+                                    vs cheapest
+
+                                </div>
+
+                              `
+
+                            : `
+
+                                <div class="extra">
+
+                                    Best available price
+
+                                </div>
+
+                              `
+                        }
+
+
+                        ${
+                            safeUrl !== "#"
+
+                            ? `
+
+                                <a
+                                    class="buy-btn"
+                                    href="${escapeAttribute(
+                                        safeUrl
+                                    )}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+
+                                    Visit Store →
+
+                                </a>
+
+                              `
+
+                            : ""
+                        }
+
+
+                    </div>
+
+
+                </div>
+
+            `;
+        }
+    );
+
+
+    resultsBox.innerHTML =
+        html;
+}
+
+
+/* =====================================================
+   PRICE FORMAT
+   ===================================================== */
+
+function formatPrice(value) {
+
+    const number =
+        Number(value);
+
+
+    if (!Number.isFinite(number)) {
+
+        return "₹—";
+    }
+
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+        }
+    ).format(number);
+}
+
+
+/* =====================================================
+   HTML SECURITY
+   ===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(value);
+}
+
+
+/* =====================================================
+   MOUSE GLOW
+   ===================================================== */
+
+document.addEventListener(
+    "pointermove",
+    function(event) {
+
+        glow.style.transform =
+
+            `translate(
+                ${event.clientX}px,
+                ${event.clientY}px
+            )
+            translate(-50%,-50%)`;
+    }
+);
+
+
+/* =====================================================
+   MOUSE TRAIL
+   ===================================================== */
+
+let lastTrail = 0;
+
+
+document.addEventListener(
+    "pointermove",
+    function(event) {
+
+
+        const now =
+            Date.now();
+
+
+        if (
+            now - lastTrail < 70
+        ) {
+
+            return;
+        }
+
+
+        lastTrail =
+            now;
+
+
+        const trail =
+            document.createElement(
+                "div"
+            );
+
+
+        trail.className =
+            "ps-pointer-trail";
+
+
+        trail.style.left =
+            event.clientX + "px";
+
+
+        trail.style.top =
+            event.clientY + "px";
+
+
+        document.body.appendChild(
+            trail
+        );
+
+
+        trail.animate(
+
+            [
+
+                {
+                    transform:
+                        "translate(-50%,-50%) scale(1)",
+
+                    opacity:
+                        0.8
+                },
+
+                {
+                    transform:
+                        "translate(-50%,-50%) scale(0)",
+
+                    opacity:
+                        0
+                }
+
+            ],
+
+            {
+
+                duration:
+                    600,
+
+                easing:
+                    "ease-out"
+            }
+        );
+
+
+        setTimeout(
+            function() {
+
+                trail.remove();
+
+            },
+            600
+        );
+
+    }
+);
+
+
+/* =====================================================
+   INTERACTIVE CONSTELLATION
+   ===================================================== */
+
+let mouseX = 0;
+let mouseY = 0;
+
+let targetX = 0;
+let targetY = 0;
+
+let currentX = 0;
+let currentY = 0;
+
+
+document.addEventListener(
+    "pointermove",
+    function(event) {
+
+
+        if (
+            window.innerWidth < 600
+        ) {
+
+            return;
+        }
+
+
+        /*
+           Convert mouse position into
+           a small movement amount.
+        */
+
+        targetX =
+            (
+                event.clientX /
+                window.innerWidth -
+                0.5
+            ) * 35;
+
+
+        targetY =
+            (
+                event.clientY /
+                window.innerHeight -
+                0.5
+            ) * 35;
+
+    }
+);
+
+
+/* =====================================================
+   SMOOTH CONSTELLATION MOVEMENT
+   ===================================================== */
+
+function animateConstellation() {
+
+
+    if (
+        window.innerWidth >= 600
+    ) {
+
+
+        /*
+           Smooth movement.
+           This makes the constellation
+           follow the mouse instead of
+           jumping.
+        */
+
+        currentX +=
+            (targetX - currentX) *
+            0.08;
+
+
+        currentY +=
+            (targetY - currentY) *
+            0.08;
+
+
+        constellation.style.transform =
+
+            `translate(
+                ${currentX}px,
+                calc(-50% + ${currentY}px)
+            )`;
+
+    }
+
+
+    requestAnimationFrame(
+        animateConstellation
+    );
+}
+
+
+animateConstellation();
+
+
+/* =====================================================
+   MOUSE ENTER / LEAVE
+   ===================================================== */
+
+document.addEventListener(
+    "mouseleave",
+    function() {
+
+        targetX = 0;
+
+        targetY = 0;
+    }
+);
+
+
+</script>
+
+</body>
+</html>
+
+
