@@ -1,14 +1,7 @@
-"""
-providers.py - where prices come from.
 
-Each provider is a function that takes a search text and returns a list of dicts:
-    {"store": str, "title": str, "price": float, "link": str, "image": str}
-
-To add a new source later (another API, or a scraper), write one more function
-that returns the same shape, then add it to PROVIDERS at the bottom.
-"""
 import os
 import re
+import statistics
 
 import requests
 from dotenv import load_dotenv
@@ -17,25 +10,50 @@ load_dotenv()
 
 
 def parse_price(value):
-    """Turn '₹1,299.00' or 'Rs. 1,299' into the number 1299.0 (or None)."""
+    """Convert prices such as ₹1,299.00 or Rs. 1,299 into floats."""
     if value is None:
         return None
+
     if isinstance(value, (int, float)):
-        return float(value)
+        price = float(value)
+        return price if price > 0 else None
+
     match = re.search(r"\d[\d,]*(?:\.\d+)?", str(value))
+
     if not match:
         return None
-    return float(match.group().replace(",", ""))
+
+    try:
+        price = float(match.group().replace(",", ""))
+        return price if price > 0 else None
+    except ValueError:
+        return None
+
+
+def matches_query(query, title):
+    """Reject results that do not contain the important search terms."""
+    query_words = re.findall(r"[a-z0-9]+", query.lower())
+    title_words = set(re.findall(r"[a-z0-9]+", title.lower()))
+
+    stop_words = {"the", "a", "an", "for", "with", "and", "or"}
+
+    important_words = [
+        word for word in query_words
+        if word not in stop_words
+    ]
+
+    return all(word in title_words for word in important_words)
 
 
 def search_serpapi(query, country="in"):
-    
-    """Real prices from many stores at once, using Google Shopping via SerpAPI.
-    """
+    """Fetch product listings using SerpAPI Google Shopping."""
 
     key = os.getenv("SERPAPI_KEY")
+
     if not key:
-        raise RuntimeError("SERPAPI_KEY is missing. Add it to your .env file.")
+        raise RuntimeError(
+            "SERPAPI_KEY is missing from your environment variables."
+        )
 
     params = {
         "engine": "google_shopping",
@@ -43,68 +61,85 @@ def search_serpapi(query, country="in"):
         "api_key": key,
         "gl": country,
         "hl": "en",
-        "google_domain": f"google.co.{country}" if country == "in" else "google.com",
+        "google_domain": (
+            f"google.co.{country}"
+            if country == "in"
+            else "google.com"
+        ),
     }
 
     response = requests.get(
         "https://serpapi.com/search.json",
         params=params,
-        timeout=20
+        timeout=20,
     )
-
     response.raise_for_status()
-    data = response.json()
 
+    data = response.json()
     results = []
 
     for item in data.get("shopping_results", []):
+        title = item.get("title", "").strip()
 
-        price = item.get("extracted_price") or parse_price(item.get("price"))
-
-        if price is None:
+        if not title or not matches_query(query, title):
             continue
 
-        # Get the product URL supplied by SerpAPI
-        raw_link = item.get("link") or item.get("product_link") or ""
+        price = item.get("extracted_price")
 
-        # Try to follow redirects to the final retailer URL
-        final_link = raw_link
+        if price is None:
+            price = parse_price(item.get("price"))
 
-        if raw_link:
-            try:
-                redirect_response = requests.get(
-                    raw_link,
-                    allow_redirects=True,
-                    timeout=10,
-                    headers={
-                        "User-Agent": "Mozilla/5.0"
-                    }
-                )
+        if price is None or price <= 0:
+            continue
 
-                final_link = redirect_response.url
+        # Do not follow redirects: they may lead to Google's
+        # "sorry" or blocking page.
+        raw_link = (
+            item.get("product_link")
+            or item.get("link")
+            or ""
+        )
 
-            except requests.RequestException:
-                # If the URL cannot be resolved, keep the original URL
-                final_link = raw_link
+        # Reject known Google blocking URLs.
+        if "google.com/sorry" in raw_link.lower():
+            raw_link = ""
 
         results.append({
             "store": item.get("source", "Unknown store"),
-            "title": item.get("title", ""),
-            "price": price,
-            "link": final_link,
+            "title": title,
+            "price": float(price),
+            "link": raw_link,
             "image": item.get("thumbnail", ""),
         })
+
+    # Filter extreme low-price outliers when enough results exist.
+    if len(results) >= 3:
+        median_price = statistics.median(
+            item["price"] for item in results
+        )
+
+        results = [
+            item for item in results
+            if item["price"] >= median_price * 0.20
+        ]
 
     return results
 
 
 def search_demo(query, country="in"):
-    """Fake data so you can build and test the website without any API key."""
+    """Fake listings for testing without an API key."""
+
     base = 1000 + (sum(ord(c) for c in query) % 40) * 100
+
     stores = [
-        ("Amazon", 1.00), ("Flipkart", 0.96), ("Croma", 1.08),
-        ("Reliance Digital", 1.05), ("Myntra", 1.12), ("Snapdeal", 0.93),
+        ("Amazon", 1.00),
+        ("Flipkart", 0.96),
+        ("Croma", 1.08),
+        ("Reliance Digital", 1.05),
+        ("Myntra", 1.12),
+        ("Snapdeal", 0.93),
     ]
+
     return [
         {
             "store": name,
@@ -117,7 +152,6 @@ def search_demo(query, country="in"):
     ]
 
 
-# Used by app.py. Order doesn't matter - results get sorted by price.
 PROVIDERS = {
     "serpapi": search_serpapi,
     "demo": search_demo,
