@@ -1,4 +1,4 @@
-# PriceScout - product price comparison
+# SaveFlo - product price comparison
 
 Type a product, see its price at different stores, and which one is cheapest.
 
